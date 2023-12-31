@@ -3,7 +3,14 @@
 
 # EJERCICIOS AJAX-APIs
 
+## Table of Contents
+
+   -[Features](#APIs:-Sitio-web-con-AJAX)
+
+
 ### APIs: Sitio web con AJAX
+
+
 
 La tecnologia AJAX tiene que ejecutarse en un entorno de servidor es decir las peticiones tienen que ser mediante el protocolo Http o https, es momento de trabajar en un entorno de desarrollo que haga las peticiones por http, tambien vamos a usar el lenguage PHP para algunos ejercicios.
 
@@ -28,5 +35,13 @@ siguiente paso seria cuando le demos click a los enlaces del menu.
 Cargmos dinamicamente el contenido:
 
 >- ``url:e.target.href,``
+
+```bash
+$ npm install axios
+```
+
+```js
+import axios, {isCancel, AxiosError} from 'axios';
+```
 
 Si tu quieres hacer un sitio que vaya posicionandoce  que tenga SEO este sito no te va servir pero hay muchos profecionales que quieren tener un sitio weba a manera de portafolio en una sola pagina y ahi si valga este tipo de tecnica en donde nunca cambian la url de su dominio. Esta tecnica tambien te va servir para un componente de pestañas y estar cambiando el contenido de la pestaña, eso se puede hacer con CSS y dysplay nones estamos en la seccion de ejercicion donde trabajamos Ajax, y quiero que veas las diferentes posibilidades que tenemos, desde cargar contenido asincrono en texto plano formateado a html es decir, no solo necesitas estar esperando puro json con el caso de las APIs de tipo REST recuerda, la tecnologia AJAX funciona con contenido textual(texto html), formato JSON y formato XML los mas populares.
