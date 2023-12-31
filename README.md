@@ -5,8 +5,7 @@
 
 ## Table of Contents
 
-   - [APIs: Sitio web con AJAX](#APIs:-Sitio-web-con-AJAX)
-
+  - [APIs: Sitio web con AJAX](#Sitio-web-con-AJAX)
 
 ### APIs: Sitio web con AJAX
 
