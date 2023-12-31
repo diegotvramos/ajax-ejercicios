@@ -5,7 +5,9 @@
 
 ## Table of Contents
 
-  - [APIs: Sitio web con AJAX](#Sitio-web-con-AJAX)
+  - [APIs: Sitio web con AJAX](#apis-sitio-web-con-ajax)
+
+    `ojo, los links a las cabeceras deben estar en minusculas y no se pone los 2 puntos`
 
 ### APIs: Sitio web con AJAX
 
