@@ -4,12 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Incluir html con Ajax</title>
-    <link rel="stylesheet" href="/css/style.css">
+    
+    <!-- <link rel="style" href="/css/style.css" type="text/css"> -->
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <style>
+        main{
+            background-color: greenyellow;
+        }
+    </style>
 </head>
 
 <script src="js/include-html.js" type="module"></script>
 <body>
-    <?php include("assets/header.html");?>
+    
+    <!--<?php include("assets/header.html");?> -->
     <div data-include="assets/header.html"></div>
     
     <main class="container"></main>

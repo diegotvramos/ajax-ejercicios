@@ -72,3 +72,26 @@ Cuando ya lo estoy ejecutando desde un entorno de servidor local es decir la pet
 Toda la documentacion está aca: `https://github.com/jonmircha/include-html/` el readme está en ingles por que es el lenguaje universal de la programacion. acostumbrate a subirlo en ingles. Si fuera navegador antiguo en lugar de usar `const` usaria variables `vars`, en lugar de usar `arrow functions` usaria `funciones anonimas` 
 
 SIGUIENTE: vamos ahcer un uploader de archivos la parte de js la vamos a trabajar con una barra de progreso pero para que no sea una subida simulada, voy a usar php. La carga la estoy manipulando don Ajax y ya una vez que termina manda la peticion al servidor y sube los archivos y la respuesta va  ser en formato JSON php es el mas instalado en el mundo.
+
+### Ejercicios AJAX - APIs: Uploader con AJAX
+
+veremos como subir archivos vamos a utilizar la API de AJAX y vamos a subir fisicamente el archivo con php.
+usamos el atributo multiple para subir varios archivos, vean que no lo estoy encerando en un formulario, como no va tener el boton enviar, lo vamos hacer en el evento `change` del imput de tipo file
+
+```html
+  <input type="file" id="files" name="files" multiple>
+```
+
+vamos a crear una funcion que me permita mediante AJAX  la carga de archivos.
+Al seleccionar un archivo nos muestra algo asi: ![imagen](/assets/manchita.JPG).
+
+ojo, no es un Arreglo, mas bien es un objeto.
+
+cuando nostros subimos ficheros mediante php, php tiene unas variables especiales que son variables de entorno.
+
+```php
+    // PARA imprimir objetos
+    var_dump($_FILES);
+```
+
+uploader.php es como una pequeña api que yo estoy consumiendo.

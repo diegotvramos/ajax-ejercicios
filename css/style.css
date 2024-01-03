@@ -1,10 +1,11 @@
-
+/*receteamos el box sizing*/
 html{
     box-sizing: border-box;
     font-family: sans-serif;
     font-size: 16px;
 }
 
+/* que todo los elementos hereden el box-sizing  del html*/
 *,
 *:before,
 *:after{
