@@ -25,6 +25,7 @@ const uploader = (file) =>{
         }else{
             let message=xhr.statusText|| "Ocurrio un error al cargar el archivo";
             console.error(`Error: ${xhr.status}: ${message}`);
+           // el.outerHTML=(`<div><p>Error ${xhr.status}: ${message}<p/></div>`); no me funcionó este mensaje en el html
         }
     });
 
@@ -36,6 +37,41 @@ const uploader = (file) =>{
 
     xhr.send(formData);
 }
+
+// necesitamos una funcion que vaya trabajando toda la parte del progreso, creo una funcion expresada
+
+const progressUpload = (file)=>{
+    const $progress= d.createElement("progress"),
+            $span= d.createElement("span");
+    $progress.value = 0;
+    $progress.max = 100;
+
+    $main.insertAdjacentElement("beforeend",$progress);
+    $main.insertAdjacentElement("beforeend",$span);
+
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+
+    fileReader.addEventListener("progress", (e) => {
+        //console.log(e);
+
+        let progress = parseInt((e.loaded*100)/e.total);
+        $progress.value=progress;
+        $span.innerHTML=`<b>${file.name} - ${progress}% </b>`
+    });
+
+    fileReader.addEventListener("loadend", (e) => {
+        uploader(file);
+        
+        setTimeout(() => {
+           $main.removeChild($progress);
+           $main.removeChild($span);
+           $files.value="";
+
+        }, 3000);
+    });
+}
+
 
 d.addEventListener("change", (e)=>{
     // si el objeto que origina el evento...
@@ -50,7 +86,8 @@ d.addEventListener("change", (e)=>{
 
         const files= Array.from(e.target.files);
         files.forEach((el) => {
-            uploader(el);
+            //uploader(el); se va ejecutar despues del proceso de carga
+            progressUpload(el);
         });
     }
 })

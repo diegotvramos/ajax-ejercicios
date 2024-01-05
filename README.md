@@ -95,3 +95,15 @@ cuando nostros subimos ficheros mediante php, php tiene unas variables especiale
 ```
 
 uploader.php es como una pequeña api que yo estoy consumiendo.
+
+### AJAX - APIs: Uploader AJAX con Barra de Progreso
+
+Hoy vamos a agregar una barra de progreso a nuestro archivo, la parte visual de la barra de progreso puede variar de un navegador a otro
+
+>- `pasó algo raro, mi hoja de estilo CSS no reconocia, tuve que apagar totalmente el servidor y reiniciarlo`
+
+[progressEvent](/assets/eventoProgresEvent.JPG) 
+
+con estos valores podemos saber cuanto tarda en subirse un archivo.
+
+>- `cuando vean que declaro variables con *$* es por que hacen referencia a un elemento que existe en el DOM`

@@ -6,6 +6,10 @@ html{
     font-size: 16px;
 }
 
+h1{
+    background-color: greenyellow;
+}
+
 /* que todo los elementos hereden el box-sizing  del html*/
 *,
 *:before,
@@ -23,6 +27,8 @@ main{
     min-height: 100vh;
 }
 
-h1{
-    background-color: yellowgreen;
+
+
+progress{
+    margin-top: 2rem;
 }
