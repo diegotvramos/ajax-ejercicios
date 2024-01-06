@@ -102,8 +102,39 @@ Hoy vamos a agregar una barra de progreso a nuestro archivo, la parte visual de 
 
 >- `pasó algo raro, mi hoja de estilo CSS no reconocia, tuve que apagar totalmente el servidor y reiniciarlo`
 
-[progressEvent](/assets/eventoProgresEvent.JPG) 
+![progressEvent](/assets/eventoProgresEvent.JPG) 
 
 con estos valores podemos saber cuanto tarda en subirse un archivo.
 
 >- `cuando vean que declaro variables con *$* es por que hacen referencia a un elemento que existe en el DOM`
+
+### Ejercicios AJAX - APIs: Uploader AJAX con Drag & Drop 
+
+```javascript 
+        // aqui no voy a utilizar la delegacion de eventos por que el unico elemento que va ser zona de interaccion activa va ser la
+        // Drop Zone, entonces los eventos se los voy a asignar a la drop zone.
+
+        $dropZone.addEventListener("dragover", (e) => {
+            //console.log(e);
+            e.preventDefault();
+            e.stopPropagation();
+            e.target.classList.add("is-active");
+        });
+
+        $dropZone.addEventListener("dragleave", (e) => {
+            //console.log(e);
+            e.preventDefault();
+            e.stopPropagation();
+            e.target.classList.remove("is-active");
+        });
+
+        $dropZone.addEventListener("drop", (e) => {/*soltar */
+            //console.log(e);
+            e.preventDefault();
+            e.stopPropagation();
+            const files = Array.from(e.dataTransfer.files);
+            files.forEach(el => progressUpload(el));
+
+            e.target.classList.remove("is-active");
+        });
+```
