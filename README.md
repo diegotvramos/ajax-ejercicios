@@ -138,3 +138,50 @@ con estos valores podemos saber cuanto tarda en subirse un archivo.
             e.target.classList.remove("is-active");
         });
 ```
+### Ejercicios AJAX - APIs: Envío Formulario con Fetch y FormSubmit.
+
+los ejercicios anteriores los del citio html el include html etc. La hicimos con el objeto XMLHttpRequest.  es decir con el objeto ajax apartir de estos ejercicios vamos a trabajar con el api de Fetch y https://formsubmit.co/documentation 
+
+```javaScript
+  d.addEventListener("submit", (e)=>{
+
+        e.preventDefault();
+
+        const $loader= d.querySelector(".contact-form-loader"),
+                        $response=d.querySelector(".contact-form-response");
+
+        $loader.classList.remove("none");                
+        
+        fetch("https://formsubmit.co/ajax/00dramos@gmail.com",{
+            method: "POST",
+            body: new FormData(e.target) // ya no debo estar enviando los VALUES
+            /*
+                la ventaja de FormData es que parcea los valores del elemento y su valor el imput y el texto que 
+                escribimos, el 'e.target' del evento es el formulario, NOTA: para que haga el parceo, recuerda que 
+                todo los imputs tiene que tener su atributo 'Name' establecido.
+            */
+            
+        })
+            .then(res => res.ok ? res.json(): Promise.reject(res))// este es un operador ternario
+            .then(json => {
+                console.log(json);
+                $loader.classList.add("none");
+                $response.classList.remove("none");
+                $response.innerHTML=`<p>${json.message}</p>`
+                $form.reset();
+            })
+            .catch(err => {
+                console.log(err);
+                let message=err.statusText|| "Ocurrio un error al enviar, intenta nuevamente";
+                $response.innerHTML = `<p>Error ${err.status}: ${message}</p`
+            })
+            .finally(() => setTimeout(() => {
+                $response.classList.add("none");
+                $response.innerHTML=""; // reseamos el innerHtml
+            }, 3000))
+
+    })
+```
+
+con este ejercicio ya podemos recibir mensajes a nuestro correo sin la necesidad de php.
+Siguiente: vamos hacer este mismo ejercicio con la API de fetch y en lugar de utilizar para el envio de formulario de formSubmit.  lo que vamos a utilizar es el script de php que lo podamos subir al servidor
