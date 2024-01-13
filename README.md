@@ -185,3 +185,46 @@ los ejercicios anteriores los del citio html el include html etc. La hicimos con
 
 con este ejercicio ya podemos recibir mensajes a nuestro correo sin la necesidad de php.
 Siguiente: vamos hacer este mismo ejercicio con la API de fetch y en lugar de utilizar para el envio de formulario de formSubmit.  lo que vamos a utilizar es el script de php que lo podamos subir al servidor
+
+ ### Ejercicios AJAX - APIs: Envío Formulario y CORS con Fetch y PHP
+
+ Lo unico que va cambiar es simplemente la peticion del end point  al que consulta nuestra funcion fetch.
+ El proyecto lo debemos ejecutar desde el servidor Xampp,
+
+ lista completa de: **mime type**
+
+ > https://developer.mozilla.org/es/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types 
+
+```javaScript
+    fetch("assets/send_mail.php", {
+            method: "POST",
+            body: new FormData(e.target) // ya no debo estar enviando los VALUES            
+        })
+```
+por alguna razon al especificar la carpeta la debemos hacer desde la carpeta padre.
+
+ ![eror](/assets/error_parcear.JPG)
+
+ tendria que tener un servidor que esté procesando peticiones por el puerto 25  que es por donde sale el protocolo SMTP
+¿por que la consola me manda el error de Token?
+por que la cabera nos está mandando un texto el **br** y el **warning** que o está en formate JSON, a causa de la falta del servidor smtp que no tengo.
+
+  ![error](/assets/debug.JPG)
+
+  #### CORS
+
+  Cros Origin Resourse Sherin.
+
+  hasta ahora toda las peticiones que hicimos en los videos de teoria y en los ejercicios que realizamos de ajax y apis todoas las anteriores TOdas han sido en el mismo en el mismo servidor en el que está el archivo php y la peticion, entonces el CORS son politicas de normas que te dicen toda las peticiones ajax en teoria tendrian que estár en el mismo servidor. Pero las Apis externas como jsonPlaceholder,  formSubmit esas no estan en nuestro servidor y aun así nos dejaron, entonces para solucionar esta restriccion hay dos maneras: una activar el modo no-cors para que funcione tu peticion , dos la api a la que estas consultando permita que el recurso sea accedido por cualquier origen.
+
+  
+
+  ```php
+        // si no especifico el parametro opcional llamado '$headers'  lo va mandar en texto plano. 
+        // r= retorno de carro, y n= nueva linea
+        // la ventaja de poner FROM es que ya no te lo envia a la vandeja de correo basura
+        $headers = "MIME-Version: 1.0\r\n" . "Content-Type: text/html; charset=utf-8\r\n" . "From: Envío Automático No Responder <no-reply@$domain>";
+   
+  ```
+
+  SIGUIENTE: integraremos otra plataforma llamada STRIP, vamos hacer un carito de comprar, parcela de pagos online, para la siguiente crea tu cuenta de STRIPE. https://stripe.com/es-419-us VAMOS HACER peticiones a APIS  que si te pidan una autenticacion y aparte de enseñaré hacer cobros en linea todo con JS sin la necesidad de librerias
