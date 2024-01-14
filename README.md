@@ -227,4 +227,30 @@ por que la cabera nos está mandando un texto el **br** y el **warning** que o e
    
   ```
 
-  SIGUIENTE: integraremos otra plataforma llamada STRIP, vamos hacer un carito de comprar, parcela de pagos online, para la siguiente crea tu cuenta de STRIPE. https://stripe.com/es-419-us VAMOS HACER peticiones a APIS  que si te pidan una autenticacion y aparte de enseñaré hacer cobros en linea todo con JS sin la necesidad de librerias
+  SIGUIENTE: integraremos otra plataforma llamada STRIP, vamos hacer un carito de comprar, parcela de pagos online, para la siguiente crea tu cuenta de STRIPE. https://stripe.com/es-419-us VAMOS HACER peticiones a APIS  que si te pidan una autenticacion y aparte de enseñaré hacer cobros en linea todo con JS sin la necesidad de librerias. STRIPE PIDE UNA AUTENTICACION.
+
+  ###  Ejercicios AJAX - APIs: Pagos Online con Fetch y Stripe (1/4)
+
+  Stripe es una pasarela de pagos,  es un servicio de cobro de hacer transacciones monetarias entre diferentes sistemas es una exelente opcion si tienes algun sitio de comercio electronico o si quieres vender y cobrar ciertos servicios atraves de plataformas en linea, para los desarrolladores tiene una gran variedad de lenguajes de programacion en la cual lo puedes implementar, y lo mas interesante es el tipico CHEKout esa pagina donde te aparece los datos para que puedas hacer una compra en linea a traves de una targeta de credito, Stripe tiene una solucion que que puedes implementar con codigo frontent javascript tambien te maneja varios lenguajes a lado del servidor (java, pyton,  php).
+
+  Cuando tu vas a usar los servicios de un 3ro mediante una api, es muy importante dedicar cierto tiempo, mas que a programar,  a leer cuales son las reglas que este servicio externo te está pidiendo para que puedas interactuar, al menos para stripe no esposible actualizar productos
+   https://stripe.com/docs
+🟣 https://stripe.com/docs/api
+🟣 https://stripe.com/docs/api/authentication 
+🟣 https://stripe.com/docs/js
+🟣 https://stripe.com/docs/api/products
+🟣 https://stripe.com/docs/api/prices
+🟣 https://stripe.com/docs/api/checkout/sessions
+🟣 https://github.com/stripe-samples
+🟣 https://github.com/stripe-samples/checkout-single-subscription
+
+  https://stripe.com/docs/api/products 
+  https://stripe.com/docs/api/checkout/sessions   toda las validacion los hace Stripe.
+
+  estableces al dashboard de Stripe, de tal manera que alguine mal intencionado obtubiera tu llave key y quisiera hacer peticiones o transacciones, no se lo va permitir por que en el dashboard de Stripe tienes establecido que esa programacion front solo va funcionar desde el origen del dominio que tu hayas definido, lo ideal es definir un dominio pero puedes definir más.
+
+puedes establecer desde que dominios aceptar las peticiones.
+
+Por cada precio que le pongas a tu producto esté nos dará un ID
+
+![imagen](/assets/Stripe-docs-api-prices.JPG)
