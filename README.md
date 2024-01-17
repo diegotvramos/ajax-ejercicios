@@ -254,3 +254,53 @@ puedes establecer desde que dominios aceptar las peticiones.
 Por cada precio que le pongas a tu producto esté nos dará un ID
 
 ![imagen](/assets/Stripe-docs-api-prices.JPG)
+
+### Ejercicios AJAX - APIs: Pagos Online con Fetch y Stripe (2/4)
+
+inclimos el script de Stripe.
+
+no lo voy a programar en un solo archivo html, por que lo voy a trabajar por modulos
+
+> Recuerda _si quieres trabajar con modulos los modulos no sirven desde el protocolo file es decir dandolé click al archivo html y abriendolo desde la ruta del disco duro tienen que estár invocando un servidor web (es la forma corecta de trabajar)_
+
+```html
+    <script src="js/stripe-checkout.js" type="module"></script>
+```
+> Recuerda _Cuando tu exportas algo por defecto en el archivo donde lo importas le puedes poner cualquier nombre y ya no tiene que usar la destructuracion. la Destructuracion son para las cosas que exportas sin el default y recuerda que por cada archivo  solamente puedes utilizar el default export una vez_
+
+```javaScript
+    export default{
+    public:"Your public Stripe key",
+    secret: "your Secret Stripe key"
+}
+```
+> Importante: _de nuestra api primero vamos a acceder a nuestros productos. vas a obtener todo tus productos que estén en tu dashboard por eso te va pedir tus credenciales de autenticacion_
+
+> el error 401 es error de autentificacion
+
+https://stripe.com/docs/api/products
+
+```Curl
+    curl -G https://api.stripe.com/v1/products \
+  -u "sk_test_51OYVv2DDb82FHuupxlIvY2yVxA2YzFJIEqLASzZ2Ab7b2cOAg8rFSLsqBeEwKTalQSXIt6Bl2yTNpVaALI8Md8NH00rqnwIFB1:" \
+  -d limit=3
+```
+
+la cabecera de autorizacion que debemos usar: 
+
+https://stripe.com/docs/api/authentication
+
+**prefijos**
+
+- Sk - es la llave secreta (secret key)
+- PK - es la llave publica (public key) 
+
+> Importante _Cada api maneja sus reglas y las cabeceras que tu la tendras que mandar y los mecanismos para autenticarte es muy distinta a la autentificacion de youtube, amazon si tu te dedicas al desarrollo de las apis de lado del servidor es que aparte de programarla tu te tienes que encargar de hacer la documentacion, en resumen esto no es algo convencional, cada api va establecer su propio tipo de autenticacion_
+
+nos devuelve `Status: 200` una peticion correcta.
+
+enlace para la documentacion de **precios** 
+
+> Nota _Necesitasmos de estos dos endpoint para poder pintar en el DOM de nuestro ejercicio tanto la imagen y el nombre del procucto y los precios lo que vamos hacer es solicitar la informacion de ambos endpoints [la de productos y la de precios]_ para formar dinamicamente nuestra targeta de ordenes
+
+que pasa cuando tu necesites la informacion de varias PIS (endpoints) para formar la interfaz de usuario? no es lo mas obtimo hacer un fetch, esperar a que ese fetch te devuelva luego solicitar el siguiente endpoint esperar a que te conteste afortunadamente la API de fetch es  es una API que devuelve promesas(que es un objeto de la programacion asincrona y tiene un metodo llamado promise: all  y este metodo promise: all te sirve para este tipo de necesidades cuando tu necesitas solicitar la informacion de varios endpoints en lugar de estar consultando cada endPoint y esperar a que te responda tu programas una sola invocacion, y ese metodo promis all va estar recibiendo toda las respuestas y al final te genera un solo objeto)

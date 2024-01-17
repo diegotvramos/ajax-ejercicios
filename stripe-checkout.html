@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout con Stripe</title>
+</head>
+<body>
+    <!-- lo vamos a trabajar con la tecnica de los templates -->
+    <h1>Checkout con Stripe</h1>
+    <section id="tacos" class="tacos"></section>
+
+    <template id="taco-template">
+        <!--  no vamos  llenar con algo, ya que lo vamos a llenar dinamicamente -->
+        <figure class="taco">
+            <img src="" alt="">
+            <figcaption>
+
+            </figcaption>
+        </figure>
+    </template>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="js/stripe-checkout.js" type="module"></script>
+
+</body>
+</html>
