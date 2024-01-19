@@ -304,3 +304,44 @@ enlace para la documentacion de **precios**
 > Nota _Necesitasmos de estos dos endpoint para poder pintar en el DOM de nuestro ejercicio tanto la imagen y el nombre del procucto y los precios lo que vamos hacer es solicitar la informacion de ambos endpoints [la de productos y la de precios]_ para formar dinamicamente nuestra targeta de ordenes
 
 que pasa cuando tu necesites la informacion de varias PIS (endpoints) para formar la interfaz de usuario? no es lo mas obtimo hacer un fetch, esperar a que ese fetch te devuelva luego solicitar el siguiente endpoint esperar a que te conteste afortunadamente la API de fetch es  es una API que devuelve promesas(que es un objeto de la programacion asincrona y tiene un metodo llamado promise: all  y este metodo promise: all te sirve para este tipo de necesidades cuando tu necesitas solicitar la informacion de varios endpoints en lugar de estar consultando cada endPoint y esperar a que te responda tu programas una sola invocacion, y ese metodo promis all va estar recibiendo toda las respuestas y al final te genera un solo objeto)
+
+### Ejercicios AJAX - APIs: Pagos Online con Fetch y Stripe (3/4)
+
+el valor en cadena de texto va ser vas facil de tratar mediante un Slice y ponerle un punto.
+
+Promis all, va esperar a que le responda cada uno de los endPoints y cuando le responda ejecutamos un metodo Then
+
+es una de las ventajas de utilizar Promise All que en el orden que nosotros hayamos definido estas invocaciones sin
+importar que respondan a distintos tiempos va respetar el orden de invocacion.
+
+```javascript
+    Promise.all([
+    fetch("https://api.stripe.com/v1/products", fetchOptios),
+    fetch("https://api.stripe.com/v1/prices",fetchOptios)
+])
+.then((responses)=> Promise.all(responses.map((res)=>res.json())))
+.then((json)=>{
+    products = json[0].data;
+    prices = json[1].data;
+prices.forEach((el) => {// lo comparamos contra el forEach de los precios
+        let productData = products.filter((product) => product.id   === el.product);
+        console.log(productData);
+
+        $template.querySelector(".taco").setAttribute("data-price",el.id);
+        $template.querySelector("img").src = productData[0].images[0];
+        //siguiente atributo a configurar, en el atributo ALT vamos a pegar el nombre del producto
+        $template.querySelector("img").alt = productData[0].name;
+        $template.querySelector("figcaption").innerHTML = `
+            ${productData[0].name}
+            <br>
+            ${el.unit_amount_decimal} ${el.currency} 
+        ` 
+        // como es un nodo del DOM le colocamos el signo del dolar
+        let $clone = d.importNode($template, true);
+        $fragment.appendChild($clone); // para no estar inyectando directamente al DOM
+    });
+
+    $tacos.appendChild($fragment);
+
+})
+```
