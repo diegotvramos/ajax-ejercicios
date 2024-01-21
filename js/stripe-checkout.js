@@ -19,6 +19,10 @@ const d = document,
         };
 let products, prices;
 
+/*formateamos la moneda */
+
+const moneyFormat = (num) => `$${num.slice(0,-2)}.${num.slice(-2)}` // traeme los 2 ultimos valores
+
 /*
     Promis all, va esperar a que le responda cada uno de los endPoints y cuando le responda ejecutamos un metodo Then
 */
@@ -54,7 +58,7 @@ Promise.all([
         $template.querySelector("figcaption").innerHTML = `
             ${productData[0].name}
             <br>
-            ${el.unit_amount_decimal} ${el.currency} 
+            ${moneyFormat(el.unit_amount_decimal)} ${el.currency} 
         `  
         //me el forEach me recuerda al PHP.
         
@@ -75,7 +79,30 @@ Promise.all([
 })
 
 
+d.addEventListener("click", (e) => {
+    // console.log(e.target);
+    if (e.target.matches(".taco *")) { /*a todo los elementos internos de la clase "Taco" */
+        // alert("A comprar");
+        let price = e.target.parentElement.getAttribute("data-price");
+        // console.log(price);
+        // En el html ya estamos invocando ala libreria de stripe.js
+        Stripe(STRIPE_KEYS.public)
+        .redirectToCheckout({
+            lineItems:[{price, quantity:1}],
+            mode:"subscription",
+            successUrl:"http://127.0.0.1:5500/assets/stripe-success.html", /*está url lo accedo desde la carpeta padre */
+            cancelUrl:"http://127.0.0.1:5500/assets/stripe-cancel.html"
+        })
+        .then((res) => {
+            console.log(res);
+            if (res.error) {
+                $tacos.insertAdjacentHTML("afterend",res.error.message); //así está en la documentacion de Stripe
+            }
+        })
 
+
+    }
+})
 
 
 

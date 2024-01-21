@@ -345,3 +345,55 @@ prices.forEach((el) => {// lo comparamos contra el forEach de los precios
 
 })
 ```
+
+### Ejercicios AJAX - APIs: Pagos Online con Fetch y Stripe (4/4)
+
+formateamos el precio
+
+> https://stripe.com/docs/api/checkout/sessions/list
+
+``List all Checkout Sessions`` nos va permitir interactuar con el formulario de pago que ya está en la infraestructura de Stripe, al evento click de cada uno de esos producto lo debemos programar, es mandar a llamar este servicio. nos va pedir llave publica, en el Github de Stripe hay varias soluciones.
+
+> https://github.com/stripe-samples/checkout-single-subscription 
+
+La integración exclusiva del cliente de Checkout no está habilitada: hay que habilitarlo en la parte de abajo se encuentra un boton.
+
+![imagen](/assets/La%20integración%20exclusiva%20del%20cliente%20de%20Checkout%20no%20está%20habilitada.JPG)
+
+
+stripe cuenta con números de targeta para pagar eje 4242 4242 2442 4242
+
+![pago](/assets/pago.JPG)
+
+Una ventaja de Stripe al tu estar tercerizando todo este proceso de comercio electronico, tu ya no te metes en las broncas y de hecho no tendrias por que estar almacenando la informacion de las targetas de credito de tus clientes eso hace stripe, ese servicio por tí, hay ejemplo de ejercicios en el github ☝ 
+
+a los productos puedes agregarle cupones, aplicar ciertos impuestos
+
+con estó ya me olvidé las validaciones a las targetas de credito
+
+```javaScript
+    d.addEventListener("click", (e) => {
+    // console.log(e.target);
+    if (e.target.matches(".taco *")) { /*a todo los elementos internos de la clase "Taco" */
+        // alert("A comprar");
+        let price = e.target.parentElement.getAttribute("data-price");
+        // console.log(price);
+        // En el html ya estamos invocando ala libreria de stripe.js
+        Stripe(STRIPE_KEYS.public)
+        .redirectToCheckout({
+            lineItems:[{price, quantity:1}],
+            mode:"subscription",
+            successUrl:"http://127.0.0.1:5500/assets/stripe-success.html", /*está url lo accedo desde la carpeta padre */
+            cancelUrl:"http://127.0.0.1:5500/assets/stripe-cancel.html"
+        })
+        .then((res) => {
+            console.log(res);
+            if (res.error) {
+                $tacos.insertAdjacentHTML("afterend",res.error.message); //así está en la documentacion de Stripe
+            }
+        })
+    }
+})
+```
+*** 
+siguiete archivos markdow --> html.
