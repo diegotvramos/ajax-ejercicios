@@ -417,3 +417,85 @@ Necesitamos mandar a llamar la libreria externa: https://showdownjs.com/
 > _Recomendacion: hacer muy bien nuestro markdown par que no tenga errores_ para no depender de grandes herramientas como wordpress, jumla, drupal de esos cmss incluso si ya habian visto gadsvi, hugo, pero si son milimalistas, 
 
 --------> proximo: pokemon, hacer un sistema de paginacion
+
+### Ejercicios AJAX - APIs: Paginación de Pokémons con Fetch (1/2) 
+
+hasta cierto punto es gratuita entonces no vamos a necesitar autenticarnos con en el caso de Estripe.
+
+En este caso vamos a mostrar el nombre, la imagen del pokemon y hacer la Paginacion
+
+> _Importante: vamos a realizar dos peticiones: peticion a la Url principal nos devuelve [nombre de pokemon como su id] entonces hay que invocar otro endpoint para poder extraer las imagenes_
+
+por cada pokemon necesitamos trabajar con peticiones asincronas
+
+¿Por que manda error undefined? por que la api de pokemon, los mensajes de erro dependen de la api que estemos interactuando.
+
+¿Si, es un arreglo por que no utilizas el metodo for each?
+por que va ejecutar todo los elementos que tiene el areglo y no se va esperár a que responda la peticion, FOR es una estructura bloqueante, hasta que no termine el flujo de cada una de sus iteraciones no va pasar a la siguiente
+
+
+```javaScript
+    let pokeAPI = "https://pokeapi.co/api/v2/pokemon/"
+
+async function loadPokemons(url) {
+    try {
+        /*No voy a utilizar la tecnica de lOS templates || template strings = [``] */
+        $main.innerHTML = `<img class="loader" src="../assets/ball-triangle.svg" alt="Cargando">`
+
+
+        //vas a esperar la respuesta que venga de fetch en la Url que te pasaron
+
+        let res = await fetch(url),
+            json = await res.json(),
+
+    //¿Por que el signo del dolar? Es una variable que tiene informacion del DOM
+            $template="",
+    // el link principal de la pagina de pockemons nos devuelve una url para poder interactuar con los enlaces de Siguiente y Atras
+    // Hasta cierto punto la api nos da esé soporte
+        $prevLink,
+        $nextLink;
+
+        //console.log(json);
+
+        if(!res.ok) throw {status: res.status, statusText: res.statusText}
+
+
+        for (let i = 0; i < json.results.length; i++) {
+            //console.log(json.results[i]);
+            try {
+                let res = await fetch(json.results[i].url),
+                    pokemon = await res.json();
+
+
+                console.log(res, pokemon);
+                if(!res.ok) throw {status: res.status, statusText: res.statusText}
+                // por cada pokemon vamos a ir creando una etiqueta FIGURE
+
+                $template +=`
+                    <figure>
+                        <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}">
+                        <figcaption>${pokemon.name}</figcaption>
+                    </figure>
+                `;
+            } catch (err) {
+                console.log(err);
+                let message = err.statusText || "Ocurrió un error";
+                $template +=`
+                    <figure>
+                        <figcaption>Error ${err.statusText}: ${message}</figcaption>
+                    </figure>
+                `;
+            }
+        }
+        // remplazamos la etiqueta MAIN por la templete ( que es la que ha creado por cada pokemon una figura)
+
+        $main.innerHTML=$template;
+
+    } catch (err) {
+        console.log(err);
+        let message = err.statusText || "Ocurrió un error";
+        $main.innerHTML = `<p>Error ${err.statusText}: ${message}</p>`
+    }
+}
+
+```
