@@ -618,3 +618,91 @@ vean que hemos trabajado con la API de pockemon con la api de fetch pero con la 
 en la siguiente ejercicio vamos a seguir trabajando con apis ahora le toca turno a TVMAZE. vamos hacer un buscador de Shows:
 
 batman
+
+### Ejercicios AJAX - APIs: Buscador de Shows con Fetch y TVMAZE API 
+
+https://www.tvmaze.com/api 
+
+TVMAZE es una pagina donde publican sobre todo shows de televicion en EEUU con toda la informacion de canales, fecha hora etc y TVMACE tiene una API publica que podemos consultar.
+
+Nosotros nos vamos a enfocar en mostrar los shows a partir de una busqueda es decir vamos hacer un buscador dinamico
+
+Vamos a definir todo el codigo html, para el cual vamos a usar un ``input`` de tipo ``search`` la ventaja es que tiene un tachesito para limpiarse ❌
+
+vamos a utilizar la tecnica de hacer una grid responsiva sin mediaquerys.
+
+A diferencia de los pockemones donde estube trabajando con la tecnica de el __innerHTML__ para pegarle al DOM para que pintara los pockemones a pantalla en está ocacion voy a utilizar **la tecnica de los templates** es mas idonea.
+
+No estoy poniendo nombres de clase por que voy a utilizar el selector descendiente para buscar el h3, el div, el img... que esté dentro de la clase show.
+
+Cuando hacemos una busquda lo que hacemos como humanos es escribir y precionar el boton enter.
+entonces vamos a reaccionar al evento keypress.
+
+Entonces la programacion del evento lo vamos hacer solamente cuando la pulsacion del keypress sea con el: keycode o la tecla enter
+
+
+> _Una buena extencion para visibilizar el codigo JSON es la extencion: Json Viewer_
+
+Cuando nosotros le mandamos un qury que no trae resultados no es que no haya mandado un error simplemente me manda un arreglo vacio, es importante conocer todo lo que tu api te pueda mandar por que de eso depende la manipulacion de los elementos
+
+![imagen de el nombre](/assets/api-tvmaze.JPG)
+
+```javascript
+const d = document,
+    $shows = d.getElementById("shows"),
+    $template =  d.getElementById("show-template").content,
+    $fragment = d.createDocumentFragment();
+
+
+    d.addEventListener("keypress", async (e) => {
+        if (e.target.matches("#search")) {
+            //console.log(e.key, e.keyCode); /*cada que yo preciono cualquiera tecla se va ejecutando una solicitud a la API, podriamos tener problemas de rendimiento */
+            if (e.key==="Enter") {
+                try {
+                    $shows.innerHTML=`<img class="loader" src="../assets/ball-triangle.svg" alt="Cargando...">`;
+                    
+                    let query = e.target.value.toLowerCase(), /*e.target es el objeto que origina el evento */
+                        api = `https://api.tvmaze.com/search/shows?q=${query}`,
+                        res = await fetch(api),
+                        json = await res.json();
+                        
+                        console.log(api, res, json);
+
+                        if (!res.ok) throw {status: res.status, statusText: res.statusText}
+
+                        if (json.length === 0) {
+                            $shows.innerHTML = `<h2>No existen resultados de shows para el criterio de busqueda: <mark>${query}</mark></h2>`
+                        }else{
+                            json.forEach((el) => {
+                                $template.querySelector("h3").textContent = el.show.name;
+                                $template.querySelector("div").innerHTML = el.show.summary?el.show.summary:"Sin descripción" ; /* Viene en formato HTML y ademas usamos un operador ternario ya que no siempre vienen con descripcion */
+                                $template.querySelector("img").src = el.show.image? el.show.image.medium:"http://static.tvmaze.com/images/no-img/no-img-portrait-text.png";
+                                $template.querySelector("img").alt = el.show.name;
+                                $template.querySelector("img").style.maxWidth="100%";
+                                $template.querySelector("a").href=el.show.url? el.show.url:"#";
+                                // su propiedad target del enlace
+                                $template.querySelector("a").target=el.show.url? "_blank":"_self";//si tiene url que se abra en otra pagina & para que no se me abra una pagina en blanco uso _self
+                                $template.querySelector("a").textContent=el.show.url? "ver más..":"";
+
+
+                                let $clone = d.importNode($template, true);
+                                $fragment.appendChild($clone);
+                            });
+
+                            $shows.innerHTML = ""; //limpiamos el louder para que no muestre en el html
+                            $shows.appendChild($fragment);
+                        }
+
+                } catch (error) {
+                    console.log(err);
+                    let message = err.statusText || "Ocurrió un error";
+                    $shows.innerHTML = `<p>Error ${err.status} : ${message}</p>`
+                }
+            }
+        }
+    });
+```
+
+Aqui estubimos aprendiendo de posibles errores por que la api puede devolvernos un null, por eso es bien importante validar los datos que esperamos recibir de la api.
+
+Siguiente: Buscador de canciones
