@@ -897,3 +897,62 @@ $selectSecondary.addEventListener("change", (e) => loadSuburbs(e.target.value));
 Siguiente: vamos a usar la API de WORDPRESS te voy a enseñar como hacer un front totalmente diferente del que te ofrese Wordpress accediendo a la informacion de un sitio mediante la API de wordpres `rest-api` 
 
 static site rendering/generators como: gadsby, hugo,  o como nextjs vuepres, empesar a convertir la informacion que tengas en un sitio Wordpress  con static site generators lo que hace es acelerar el tiempo de carga de tus sitios
+
+
+###  WordPress REST API y Fetch (1 / 5)
+
+https://developer.wordpress.org/rest-api/ está es la documentacion
+
+Tú subiendo la informacion a un sitio de wordpress tu puedes crear un frondend absolutamente con las caracteristicas que necesites muy al estilo de los generadores de sitios estáticos gadsby() [sergey](https://sergey.cool/), [hugo](https://gohugo.io/) consumiendo la data de un sitio hecho en wordpress
+
+> **Importante!** hay wordpress.com = ellos te ofrecen todo y wordpress.org es software libre que descargamos los desarrolladores.
+
+__the loop__ es la funcion que tiene wordpress para traernos la informacion de cada uno de las entradas (páginas) de tu sitio, entonces es muy importante entender que es lo que nos ofrece este Loop por que es a eso mismo que nosotros podemos acceder, todo lo que podamos incertar, modificar, eliminar, es decir todo el crud que podemos hacer desde la interfaz de wordpress tambien lo podemos acceder desde la API de wordPress
+
+> para consumir la informacion no necesitas de credenciales, eso va depender de la seguridad que tu le implementes a tu wordPress y si permites peticiones de tipo REST.
+
+para este ejercicio, vamos hacer un front basandonos en la informacion de un sitio en wordPress es decir solo vamos a consumir la informacion mediante el metodo GET no vamos hacer peticiones como para incertar una nueva entrada, un nuevo usuario, pero te comento que revisando bien los permisos a tu wordPress tambien tu puedes crear practicamente, interactuar con esta API de tipo REST y tambien podrias publicar una entrada modificar las categorias autenticarte en tu cuenta de usario es decir acceder a los demas verbos adicionales al metodo GET. tambien puedes hacer las peticiones del INSERT UPDATE, Y DELETE, para esa parte si te van a pedir tu llave tu credencial.
+
+la función de **the loop** tiene la caracteristica de traernos la informacion de cada una de las entradas o páginas de nuestro blog
+
+>- nombre del artículo.
+
+>- Autor
+
+>- Avatar del Autor
+
+>- estracto o dexert (los primeros textos que te dan la introduccion)
+
+páginas hechas con wordpres:  https://css-tricks.com/  https://www.whitehouse.gov/ 
+
+Si ustedes conocen un sitio que esté hecho en wordpress y lo visitán o por que es un blog que siguen ustedes podrian consumir la información de ese sitio y saber si la API de wordpress que por defecto al menos para consumir la información  está abierta entonces no necesariamente ustedes tendrian que utilizar el sitio que yo voy a implementar o si en su maquina tiene un sitio hecho en wordpress tambien podrian consumir la informacion, la diferencia es que en lugar de poner el dominio eje malvestida.com van a poner  localhost//c/etc... no necesito tener xammp activado. lo voy a correr desde liveServer. por que el sitio que voy a consumir es el de malvestida.com
+
+hay un error de favicon cada vez que levantas un Live Server si no tienes el favicon te detecta.
+
+**NAMESPACES**
+
+> los namespaces va ir variando de los plugins que tenga instalado su sitio. por que hay ciertos plugins que tienen cierta documentacion y cierto soporte para que nosotros lo podamos consumir la informacion que genere el plugin en la api de tipo rest.
+
+**contact-form-7** este plugin sirve para hacer formularios en wordpress
+**oembed** enbebe cualquier elemento que no es texto eje: fit de twiter un post de instagram un video de youtube un mapa de google
+**yoast** este plugin sirve para hacer CEO 
+
+**/v2** y este prefijo que va despues del plugin es para interactuar con la documentacion es la v2 de tipo rest
+
+**ROUTES**
+
+Las rutas son todos esos endpoints a los que yo puedo acceder a travez de la api de WordPress, pueden ser más a los que muestra la documentacion de el consumo de api de wordPress
+
+una busqueda por logica lo vas hacer por el metodo GET
+
+para consumir la api debes ponerlo de esta manera: [**WP-JSON**](https://developer.wordpress.org/rest-api/key-concepts/)
+
+```javascript
+    fetch("https://malvestida.com/wp-json/posts") /*te va traer independientemente si está publicado o todavia*/
+    /*
+        con esta ruta recibimos una respuesta JSON que muestra qué rutas están disponibles y qué puntos 
+        finales están disponibles dentro de cada ruta.
+    */
+```
+
+¿Como puedo acceder a los ultimos post que tiene este sitio?
