@@ -7,6 +7,29 @@
 </head>
 <body>
     <h1>WordPress REST API</h1>
+    <article id="site" class="site"></article>
+    <section id="posts" class="posts"></section>
+    <img src="assets/ball-triangle.svg" alt="Cargando" class="loader">
+    <template id="post-template">
+        <article class="post">
+            <img class="post-image">
+            <aside>
+                <h2 class="post-title"></h2>
+                <figure class="post-author"></figure>
+                <small class="post-date"></small>
+                <a class="post-link" target="_blank">Ver publicacíon original</a>
+                <p class="post-excerpt"></p>
+                <div class="post-categories"></div>
+                <div class="post-tags"></div>
+                <!-- es un acordeon -->
+                <details class="post-content">
+                    <summary>Ver contenido de la publicacíon</summary>
+                    <article></article>
+                </details>
+            </aside>
+        </article>
+        <hr>
+    </template>
 
     <script src="js/wp-api-rest.js"></script>
 </body>

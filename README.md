@@ -956,3 +956,83 @@ para consumir la api debes ponerlo de esta manera: [**WP-JSON**](https://develop
 ```
 
 ¿Como puedo acceder a los ultimos post que tiene este sitio?
+
+### WordPress REST API y Fetch (2 / 5)
+
+Puedes acceder a cualquier sitio que tenga público eso de la WordPress API Rest por default cuando tu instalas un sitio en WordPress. tienes el acceso libre para consumirlo.
+
+¿Que pasaria si yo quisiera crear un nuevo post?
+Para crear un nuevo post tendria que tener cierta autentificación. en esta serie de ejercicios el objetivo es hacer un frontend diferente de cualquier sitio que esté hecho en wordPress y que nos permita consumir su rest Api.
+
+¿Cual seria la forma mas simple de interactuar con la API de tal manera que con solo cambiar el nombre de una variable accedemos a la información de un sitio?
+
+Te propongo una tecnica para ir guardando los endpoints
+
+> Dominio: `https://malvestida.com/`
+
+> Obtener la informacion del sitio[nombre, home, descripcion...]: `https://malvestida.com/wp-json`
+
+> Obtener la información del [namespace, routes] información nativa de la api: `https://malvestida.com/wp-json/wp/v2`
+
+```javaScript
+    //definimos variables
+const d = document,
+    $site = d.getElementById("site"),
+    $posts = d.getElementById("posts"),
+    $loader = d.querySelector(".loader"),
+    $template = d.getElementById("post-template").content, //lo que nos interesa es su contenido
+    $fragment = d.createDocumentFragment(),
+    //Estas constantes van a ir en mayusculas por que durante el flujo de nuestro ejercicio no van a cambiar|| prueba con sitios de noticias 😀
+    DOMAIN =  "https://malvestida.com/",
+    SITE = `${DOMAIN}/wp-json`,
+    API_WP = `${SITE}/wp/v2`, //en esta ruta ya tenemos acceso a la información nativa de la api de todo sitio hecho en wordpress 
+    // me creo una constante por cada endpoints al que yo quisiera consultar eje. un endpoint para las páginas un endpoit para las categorias, etc.
+    //hacen referencia a la tablita de los endpoints
+    POSTS= `${API_WP}/posts`,
+    PAGES= `${API_WP}/pages`,
+    CATEGORIES= `${API_WP}/categories`;
+
+
+
+
+function getSiteData() {
+    fetch(SITE)
+    .then(res=> res.ok? res.json():Promise.reject(res))
+    .then(json=>{
+        console.log(json);
+        $site.innerHTML=`
+        <h3>Sitio Web</h3>
+        <h2>
+            <a href="${json.url}" target="_blank">${json.name}</a>
+        </h2
+        <p>${json.description}</p>
+        <p>${json.timezone_string}</p>
+        `
+    })
+    .catch((err) => {
+        console.log(err);
+        let message = err.statusText||"Ocurrio un Error";
+        $site.innerHTML = `<p>Error ${err.statusText}: ${message}</p>`
+    });
+}
+
+function getPost() {
+    fetch(POSTS)
+    .then(res=> res.ok? res.json():Promise.reject(res))
+    .then(json=>{
+        console.log(json);
+    })
+    .catch((err) => {
+        console.log(err);
+        let message = err.statusText||"Ocurrio un Error";
+        $posts.innerHTML = `<p>Error ${err.statusText}: ${message}</p>`;
+        $loader.style.display="none"; /*si hay un mensaje de error nosotros vamos a ocultar el loader */
+    });
+}
+
+// ambas funciones se van a ejecutar a la carga del documento
+d.addEventListener("DOMContentLoaded", (e) => {
+    getSiteData();
+    getPost();
+})
+```
