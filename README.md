@@ -968,11 +968,16 @@ Para crear un nuevo post tendria que tener cierta autentificación. en esta seri
 
 Te propongo una tecnica para ir guardando los endpoints
 
-> Dominio: `https://malvestida.com/`
 
-> Obtener la informacion del sitio[nombre, home, descripcion...]: `https://malvestida.com/wp-json`
+> **`https://malvestida.com/`** Este es el dominio 
 
-> Obtener la información del [namespace, routes] información nativa de la api: `https://malvestida.com/wp-json/wp/v2`
+> **`https://malvestida.com/wp-json`** Obtiene la informacion del sitio[nombre, home, descripcion...]
+
+> **`https://malvestida.com/wp-json/wp/v2`** Obtiene la información del [namespace, routes] información nativa de la api
+
+> **`https://malvestida.com/wp-json/wp/v2/posts`** este es un **endpoint**  y obtiene una coleccion de publicaciones.
+
+
 
 ```javaScript
     //definimos variables
@@ -991,9 +996,6 @@ const d = document,
     POSTS= `${API_WP}/posts`,
     PAGES= `${API_WP}/pages`,
     CATEGORIES= `${API_WP}/categories`;
-
-
-
 
 function getSiteData() {
     fetch(SITE)
@@ -1035,4 +1037,55 @@ d.addEventListener("DOMContentLoaded", (e) => {
     getSiteData();
     getPost();
 })
+```
+### WordPress REST API y Fetch (3 / 5)
+
+
+Por cada post tendria que hacer 4 peticiones al menos para formar el templete de la estructura que hice.
+
+es muy importante leer la documentacíon. nos podemos ahorar muchas peticiones. eje: el parametro enbed y cuando nosotros activamos ese elemento __embed__  nos trae un arreglo un poco mas largo nos va traer nombre de las categorias, de las etiquetas si no hubiera esta opcion  se tendria que llamar por cada post las 4 peticiones: medias, categorias, etiquetas, informacion de los usuarios lo único que debemos es hacer lo siguiente:  aumentar **?_embed**
+
+> **`https://malvestida.com/wp-json/wp/v2/posts?_embed`** 
+
+al agregarle ese atributo ya la base de datos de wordpress hace los querys
+
+si detectan algo que ven en al API que no está, nunca duden en preguntarle a los creadores de la API. 
+
+> en vimeo no venia ningun endpoit para modificar el password entonces pregunté por correo electronico al soporte.
+
+> Si ven que algo en la documentacion de la Api que ustedes esten utilizando no viene traten de buscar en forros, o pregunten a soporte
+
+**EMBED** no bien explicita en la documentacion de WordPress te permite traer la informacion vinculada. Yo lo encontre buscando en un forro de **Stack Overflow**.
+
+Son tips que los aprendes a la mala con muchos días de frustracion aunque no esté en la documentacion trata de contactar a la persona responsable de la API  que te esclaresca esas dudas o buscar en forros de ayuda
+
+```javascript
+    function getPost() {
+
+    $loader.style.display="block";
+
+    fetch(POSTS)
+    .then(res=> res.ok? res.json():Promise.reject(res))
+    .then(json=>{
+        console.log(json);
+        json.forEach((el) => {
+            $template.querySelector(".post-image").src=el._embedded["wp:featuredmedia"][0].source_url; /*lo ponesmos entre corchetes para que no de error los dos puntos */
+            $template.querySelector(".post-image").alt=el.title.rendered;
+            $template.querySelector(".post-title").innerHTML=el.title.rendered;
+
+
+            let $clone= d.importNode($template, true);
+            $fragment.appendChild($clone);
+        });
+        $posts.appendChild($fragment);
+        $loader.style.display="none";
+
+    })
+    .catch((err) => {
+        console.log(err);
+        let message = err.statusText||"Ocurrio un Error";
+        $posts.innerHTML = `<p>Error ${err.statusText}: ${message}</p>`;
+        $loader.style.display="none"; /*si hay un mensaje de error nosotros vamos a ocultar el loader */
+    });
+}
 ```

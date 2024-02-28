@@ -12,7 +12,7 @@ const d = document,
     API_WP = `${SITE}/wp/v2`, //en esta ruta ya tenemos acceso a la información nativa de la api de todo sitio hecho en wordpress 
     // me creo una constante por cada endpoints al que yo quisiera consultar eje. un endpoint para las páginas un endpoit para las categorias, etc.
     //hacen referencia a la tablita de los endpoints
-    POSTS= `${API_WP}/posts`,
+    POSTS= `${API_WP}/posts?_embed`,
     PAGES= `${API_WP}/pages`,
     CATEGORIES= `${API_WP}/categories`;
 
@@ -41,10 +41,25 @@ function getSiteData() {
 }
 
 function getPost() {
+
+    $loader.style.display="block";
+
     fetch(POSTS)
     .then(res=> res.ok? res.json():Promise.reject(res))
     .then(json=>{
         console.log(json);
+        json.forEach((el) => {
+            $template.querySelector(".post-image").src=el._embedded["wp:featuredmedia"][0].source_url; /*lo ponesmos entre corchetes para que no de error los dos puntos */
+            $template.querySelector(".post-image").alt=el.title.rendered;
+            $template.querySelector(".post-title").innerHTML=el.title.rendered;
+
+
+            let $clone= d.importNode($template, true);
+            $fragment.appendChild($clone);
+        });
+        $posts.appendChild($fragment);
+        $loader.style.display="none";
+
     })
     .catch((err) => {
         console.log(err);
