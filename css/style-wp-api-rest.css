@@ -1,4 +1,111 @@
 
+html{
+    box-sizing: border-box;
+    font-family: 'Raleway', sans-serif;
+    font-size: 1rem;
+}
+
+*,
+*::after,
+*::before{
+    box-sizing: inherit;
+}
+
+/*Para los enlaces*/
+a{
+    color: #01579b;
+    transition: all 0.3s ease-out;
+}
+
+a:hover{
+    opacity: 0.75;
+}
+
+/*para las Imágenes*/
+
+img{
+    max-width: 100%;
+    height: auto;
+}
+
+h1{
+    text-align: center;
+}
+
+/*para las lineas divisorias*/
+
+hr{
+    border: thin solid #01579b;
+    margin: 3rem auto;
+    width: 80%;
+}
+
+/*Donde viene la informacion del sitio*/
+.site{
+    margin: 1rem auto;/*Arriba y abajo un rem y automático a los lados*/
+    padding: 1rem;
+    max-width: 50%;
+    text-align: center;
+}
+/*hay ciertos elementos que quiero que estén  con un text-align normal*/
+
+.post-excerpt,
+.post-categories,
+.post-tags,
+.post-content{
+    text-align: left;
+}
+
+.post-content summary{
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.post-content > article{
+    padding: 1rem;
+    background-color: #e3f2fd;
+}
+
+.post-content img{
+    display: block;
+    margin: auto;
+}
+/*Para cada uno de los posts*/
+
+.post{
+    margin: 1rem auto;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    max-width: 80%;
+    text-align: center;
+    background-color: #eceff1;
+}
+
+/*para que la imagen del avatar sea redondo*/
+.post-author img{
+    border-radius: 50%;
+}
+
+
+.post-date{
+    margin: 1rem auto;
+    display: block;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .loader{
     display: none;
     margin: 2rem auto;

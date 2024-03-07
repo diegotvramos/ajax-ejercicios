@@ -903,6 +903,8 @@ static site rendering/generators como: gadsby, hugo,  o como nextjs vuepres, emp
 
 https://developer.wordpress.org/rest-api/ está es la documentacion
 
+https://developer.wordpress.org/rest-api/reference/posts/#list-posts
+
 Tú subiendo la informacion a un sitio de wordpress tu puedes crear un frondend absolutamente con las caracteristicas que necesites muy al estilo de los generadores de sitios estáticos gadsby() [sergey](https://sergey.cool/), [hugo](https://gohugo.io/) consumiendo la data de un sitio hecho en wordpress
 
 > **Importante!** hay wordpress.com = ellos te ofrecen todo y wordpress.org es software libre que descargamos los desarrolladores.
@@ -1089,3 +1091,107 @@ Son tips que los aprendes a la mala con muchos días de frustracion aunque no es
     });
 }
 ```
+### WordPress REST API y Fetch (4 / 5)
+
+En seciones anteriores te daba unas recomendaciones sobre como consumir consultar e incluso preguntar a los creadores de las APIS con las que estés trabajando sobre todo si estas pagando para implementar esa API el problera era que sin este parametro`/posts?_embed` yo por cada post hubiera tenido que hacer una peticion al endpoint de autores, categorias y de etiquetas para poder pintar toda la información gracias a ese parametro `/posts?_embed` nosotros vamos hacer una sola peticion. 
+
+La informacion del autor me la está debolviendo en un arreglo por que hay articulos que se escriben en colaboracion pero nosotros nos vamos a centrar en imprimir el author: posicion 0
+
+En la consola del navegador
+
+_vean que yo le puedo pasar ese formato que me muestra wordPress vean que es un formato valido para javaScript_
+
+> ``new Date(""2024-02-29T17:50:18"")``
+
+_le puedo aplicar esto, y me daria la fecha y la hora en formato mas leible_
+
+> `new Date(""2024-02-29T17:50:18"").toLocaleString`
+
+_Si yo solo quiero la fecha_
+
+> `new Date(""2024-02-29T17:50:18"").toLocaleDateString`
+
+_Si yo solo quisiera la hora_
+
+> `new Date(""2024-02-29T17:50:18"").toLocaleTimeString`
+
+![date](/assets/date-wp.JPG)
+
+ Si revisamos el parrafo de excerpt de el documento html Los puntos supensivos vienen con corchetitos ``[...]``
+
+ ahora si revisamos la consola y copiamos el contenido, es que ahi ya lo están renderizando en formato html, esos puntos suspensivo entre los corchetes vienen codificados con ``[&hellip;]`` 
+
+ Entonces lo que yo puedo decirle es que voy a reemplazar esto: `[&hellip;]`  por que se ven rraro los puntos suspensivos entre los corchetes. entonces puedo reemplazarlos `.replace("[&hellip;]", "...")`
+
+ ![categorias](/assets/wp-categorias.JPG)
+
+ las categorias y las etiquetas deben de venir en este objeto _embedded,-> wp:term , para poder acceder a ese objeto vamos a tener que usar la notación de los corchetes, y ya saben el primer areglo son para las categorias y el segundo arreglo son para las etiquetas.
+
+ para eso me voy ayudar de dos variables que nos van a ayudar para recorer tanto las categorias como las etiquetas.
+
+ necesitamos un foreach muy similar en la posicion 1 que hace referencia a los elementos de las etiquetas tags (+=) es para concatenar, quedaria de esta forma `  el._embedded["wp:term"][1].forEach(el=>tags+=<li>${el.name}</li>);`
+
+Si tu en tu wordpress tienes creadas taxonomias diferentes  a las categorias y a las etiquetas acuerdense se van alistando en las siguientes posiciones entonces tambien tendrias que hacer un foreach para esas taxonomias nuevas
+
+Tenemos la etiqueta Details, vamos a buscar el article que está dentro del post-content y vamos a imprimir el contenido y por eso está dentro de un acordeón.
+
+```javascript
+     json.forEach((el) => {
+
+            let categories="",
+                tags="";
+
+            el._embedded["wp:term"][0].forEach(el=>categories+=`<li>${el.name}</li>`);
+            el._embedded["wp:term"][1].forEach(el=>tags+=`<li>${el.name}</li>`); // El nombre de estas etiquetas se encuentra en varior areglos es por eso que lo recorremos con un ForEach
+
+            $template.querySelector(".post-image").src=el._embedded["wp:featuredmedia"][0].source_url; /*lo ponesmos entre corchetes para que no de error los dos puntos */
+            $template.querySelector(".post-image").alt=el.title.rendered;
+            $template.querySelector(".post-title").innerHTML=el.title.rendered;
+            $template.querySelector(".post-author").innerHTML= `
+                <figcaption> AUTOR: ${el.yoast_head_json.author}</figcaption>
+            `; 
+            //vamos a buscar la ruta de la imagen como el nombre del autor, || autor posicion 0
+            //el parámetro de el avatar del autor ya no están disponibles
+            //<img src="${el._embedded.author[0].avatar_urls["48"]}" alt="${el._embedded.author[0].name}"> 
+            //<a href="${DOMAIN}/author/${el.yoast_head_json.og_site_name}">${el.yoast_head_json.author}</a>
+            $template.querySelector(".post-date").innerHTML=new Date(el.date).toLocaleString();
+            $template.querySelector(".post-link").href=el.link; /*debes tener buen ojo es solo link no está dentro de otro atributo. */
+            $template.querySelector(".post-excerpt").innerHTML=el.excerpt.rendered.replace("[&hellip;]", "..."); /*El estracto siempre viene con los puntos suspensivos [...] */
+            $template.querySelector(".post-categories").innerHTML= `
+                <p>Categorías: </p>
+                <ul>${categories}</ul>
+            `;
+            $template.querySelector(".post-tags").innerHTML= `
+                <p>Etiquetas </p>
+                <ul>${tags}</ul>
+            `;
+            $template.querySelector(".post-content > article").innerHTML=el.content.rendered;
+
+
+            let $clone= d.importNode($template, true);
+            $fragment.appendChild($clone);
+        });
+```
+
+Ahora lo vamos a maquetar. vamos a google fonts y vamos a utilizar la tipografifa.
+
+> ``https://fonts.google.com/specimen/Raleway?query=raleway`` raleway
+
+![Fuente](/assets/obtener-fuente.JPG)
+
+despues de buscar por el nombre hacemos click en `Get font` ya tu decides si quieres el código embebido o descargarlo.
+
+> Creo que es muy usado el `regular 400` y `bold 700`
+
+Ahora, podemos copiar y pegar otra url de otra página hecha en wordpress y tendria que funcionar igualmente.
+
+
+> Si te sale error al obtener la informacion de una página revisa la consola del navegador y observa que error, y en en que liea está el error. con css trix no tenia una imagen destacada
+
+> Ya si nosotros quisieramos crear dinamicamente desde una interfaz una publicacion o una página ahi si nos va pedir credenciales, pero vean que para consumir no hay problemas
+
+
+SIGUIENTE: hacer una pagínación con **infinite Scroll** 
+
+
+### 
