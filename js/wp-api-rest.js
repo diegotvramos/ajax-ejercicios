@@ -1,6 +1,7 @@
 
 //definimos variables
 const d = document,
+    w = window,
     $site = d.getElementById("site"),
     $posts = d.getElementById("posts"),
     $loader = d.querySelector(".loader"),
@@ -13,9 +14,12 @@ const d = document,
     API_WP = `${SITE}/wp/v2`, //en esta ruta ya tenemos acceso a la información nativa de la api de todo sitio hecho en wordpress 
     // me creo una constante por cada endpoints al que yo quisiera consultar eje. un endpoint para las páginas un endpoit para las categorias, etc.
     //hacen referencia a la tablita de los endpoints
-    POSTS= `${API_WP}/posts?_embed`,
+    POSTS= `${API_WP}/posts?_embed`, /*&per_page=5&page=10*/
     PAGES= `${API_WP}/pages`,
     CATEGORIES= `${API_WP}/categories`;
+
+    let page = 1,
+        perPage = 10; //quiero que me cargue por página 5 post
 
 
 
@@ -45,7 +49,7 @@ function getPost() {
 
     $loader.style.display="block";
 
-    fetch(POSTS)
+    fetch(`${POSTS}&page=${page}&per_page=${perPage}`)
     .then(res=> res.ok? res.json():Promise.reject(res))
     .then(json=>{
         console.log(json);
@@ -57,7 +61,8 @@ function getPost() {
             el._embedded["wp:term"][0].forEach(el=>categories+=`<li>${el.name}</li>`);
             el._embedded["wp:term"][1].forEach(el=>tags+=`<li>${el.name}</li>`); // El nombre de estas etiquetas se encuentra en varior areglos es por eso que lo recorremos con un ForEach
 
-            $template.querySelector(".post-image").src=el._embedded["wp:featuredmedia"][0].source_url; /*lo ponesmos entre corchetes para que no de error los dos puntos */
+            $template.querySelector(".post-image").src=el._embedded["wp:featuredmedia"]?el._embedded
+            ["wp:featuredmedia"][0].source_url:""; /*lo ponesmos entre corchetes para que no de error los dos puntos */
             $template.querySelector(".post-image").alt=el.title.rendered;
             $template.querySelector(".post-title").innerHTML=el.title.rendered;
             $template.querySelector(".post-author").innerHTML= `
@@ -100,7 +105,35 @@ function getPost() {
 d.addEventListener("DOMContentLoaded", (e) => {
     getSiteData();
     getPost();
-})
+});
+
+//asigno al evento window el evento del ""scorll""
+//Voy hacer una destructuración de un elemento en particular
+// Un scroll infinito radica en detectar que llegues al final de la página comprararlo
+// contra la posicion que lleva tu barra de desplazamiento entonces en ese momento hacer la peticion
+// y cargar más elementos, entonces debo obtener 3 propiedades. que cuelgan de la etiqueta html
+//Recuerda. La etiqueta HTML  en el DOM DE js es: document.documentElement
+w.addEventListener("scroll",(e)=>{
+    /*¿Que me va interesar obtener de la etiqueta html? su propiedad scrollTop 
+    Podria aver hecho esto: 
+         const scrollTop = d.documentElement.scrollTop; PEero uso la destructuracion.
+    */
+
+    const {scrollTop, clientHeight, scrollHeight}= d.documentElement;
+    // console.log(scrollTop, clientHeight, scrollHeight);
+    /*
+        primer valor (cuanto me he alejado de la margen top la bara de desplazamiento)
+        la segunda variable clientHeight(significa cual es la altura del view port del navegador, la algura de la ventana visible)
+        la propiedad scrollHeight(me calcula el total que tengo de scroll es un número fijo)
+    */
+    if (scrollTop + clientHeight >= scrollHeight) {
+        console.log("Cargar más posts");
+        // yo tendria que invocar la funcion:
+        // pero antes debemos devemos incrementar.
+        page ++;
+        getPost(); // me vuelve a cargar los mismos 10 posts
+    }
+});
 
 
 
