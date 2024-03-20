@@ -3,6 +3,8 @@
 
 # EJERCICIOS AJAX-APIs
 
+[link](https://diegotvramos.github.io/ajax-ejercicios/)
+
 ## Table of Contents
 
   - [APIs: Sitio web con AJAX](#apis-sitio-web-con-ajax)
