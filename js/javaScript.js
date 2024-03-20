@@ -31,7 +31,7 @@ xhr.send();
 
 d.addEventListener("DOMContentLoaded", (e)=>{
     getHTML({
-        url:"assets/home.html",
+        url:"assets/home.html", /*¿/? */
         success:(html)=>$main.innerHTML=html,
         error:(err)=>$main.innerHTML= `<h1>${err}</h1>`
     });

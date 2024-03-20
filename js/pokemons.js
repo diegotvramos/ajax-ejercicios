@@ -7,7 +7,7 @@ let pokeAPI = "https://pokeapi.co/api/v2/pokemon/"
 async function loadPokemons(url) {
     try {
         /*No voy a utilizar la tecnica de lOS templates || template strings = [``] */
-        $main.innerHTML = `<img class="loader" src="../assets/ball-triangle.svg" alt="triangle cargando">`
+        $main.innerHTML = `<img class="loader" src="assets/ball-triangle.svg" alt="triangle cargando">`
 
 
         //vas a esperar la respuesta que venga de fetch en la Url que te pasaron
